@@ -1,1 +1,1 @@
-export const REACT_APP_URL = "http://localhost:4000";/* URL DEL BACKEND */
+export const REACT_APP_URL = "https://flash-backend-e5x3.onrender.com";/* URL DEL BACKEND */
