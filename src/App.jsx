@@ -14,9 +14,9 @@ function App() {
         <HashRouter>
           <Routes>
             <Route path="/" element={<AlfaPage />} />
-            <Route element={<ProtectedRoute/>}>
+            
               <Route path="/tasks" element={<TaskPage />} />
-            </Route>
+      
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>
           </Routes>

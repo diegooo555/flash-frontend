@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
         id: "",
         email: "",
     })
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [isAuthenticated, setIsAuthenticated] = useState(true)
     const [loading, setLoading] = useState(true)
 
     const signup = async (user)=> {
