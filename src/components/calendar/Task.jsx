@@ -5,7 +5,7 @@ function Task({task, positionPorcent, heightPorcent, leftPorcent, setTaskModal, 
     <button
       className="w-[13.42857143%] absolute
         rounded-md flex flex-col text-white 
-        z-10 overflow-auto"
+        z-10 overflow-auto scroll-hidden"
       style={{
         top: `${positionPorcent}rem`,
         height: `${heightPorcent}rem`,
