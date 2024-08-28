@@ -24,6 +24,8 @@ function CreateTask({createModal, setCreateTaskModal}) {
   const [dateEnd, setDateEnd] = useState(formatDate(createModal.hourEnd, createModal.amPmEnd))
 
   const taskContext = useContext(TaskContext);
+  const wscreen = window.innerHeight / 2;
+  const hscreen = window.innerWidth / 2;
 
 
   const onSubmit = handleSubmit(async (data) => {
@@ -31,81 +33,83 @@ function CreateTask({createModal, setCreateTaskModal}) {
       setCreateTaskModal((prev) => ({...prev, state: false}));
   });
   return (
-    <div className="fixed top-[35%] left-[40%] z-20 h-[22rem] min-w-[400px]">
-      <form
-        onSubmit={onSubmit}
-        className="flex flex-col items-center w-full border-blue-500 border-[1.5px] rounded-md bg-white h-full overflow-y-scroll"
-      >
-        <fieldset className="w-full">
-          <div className="flex justify-center items-center p-3 gap-3">
-            <img src="/tarea.png" alt="" width="50px" height="50px" />
-            <legend className="text-orange-500 font-extrabold text-2xl">
-              Nueva Tarea
-            </legend>
-          </div>
-        </fieldset>
 
-        <fieldset className="flex flex-col items-center w-full gap-1">
-          <label htmlFor="title" className="text-[darkblue] font-bold text-lg">
-            Titulo:
-          </label>
-          <input
-            type="text"
-            id="title"
-            className="outline-none border-gray-400 border-[1px] w-[90%] p-3 rounded-md"
-            {...register("title")}
-            required
-          />
+      <div className={`z-20 h-[70vh] min-w-[400px] max-md:h-[50vh] fixed`} style={{top: wscreen, left: hscreen, transform: 'translate(-50%, -50%)',}}>
+        <form
+          onSubmit={onSubmit}
+          className="flex flex-col items-center w-full border-blue-500 border-[1.5px] rounded-md bg-white h-full overflow-y-scroll"
+        >
+          <fieldset className="w-full">
+            <div className="flex justify-center items-center p-3 gap-3">
+              <img src="/tarea.png" alt="" width="50px" height="50px" />
+              <legend className="text-orange-500 font-extrabold text-2xl">
+                Nueva Tarea
+              </legend>
+            </div>
+          </fieldset>
 
-          <label
-            htmlFor="description"
-            className="text-[darkblue] font-bold text-lg"
-          >
-            Descripción:
-          </label>
-          <textarea
-            id="description"
-            rows={3}
-            className="outline-none border-gray-400 border-[1px] w-[90%] rounded-md"
-            {...register("description")}
-          ></textarea>
+          <fieldset className="flex flex-col items-center w-full gap-1">
+            <label htmlFor="title" className="text-[darkblue] font-bold text-lg">
+              Titulo:
+            </label>
+            <input
+              type="text"
+              id="title"
+              className="outline-none border-gray-400 border-[1px] w-[90%] p-3 rounded-md"
+              {...register("title")}
+              required
+            />
 
-          <label htmlFor="date" className="text-[darkblue] font-bold text-lg">
-            Fecha Inicio:
-          </label>
-          <input
-            type="datetime-local"
-            id="date"
-            className="outline-none border-gray-400 border-[1px] w-[90%] rounded-md p-3 text-center"
-            {...register("dateStart")}
-            value={dateStart}
-            onChange={(e) => setDateStart(e.target.value)}
-            required
-          />
+            <label
+              htmlFor="description"
+              className="text-[darkblue] font-bold text-lg"
+            >
+              Descripción:
+            </label>
+            <textarea
+              id="description"
+              rows={3}
+              className="outline-none border-gray-400 border-[1px] w-[90%] rounded-md"
+              {...register("description")}
+            ></textarea>
 
-          <label htmlFor="date" className="text-[darkblue] font-bold text-lg">
-            Fecha Fin:
-          </label>
-          <input
-            type="datetime-local"
-            id="date"
-            className="outline-none border-gray-400 border-[1px] w-[90%] rounded-md p-3 text-center"
-            {...register("dateEnd")}
-            value={dateEnd}
-            onChange={(e) => setDateEnd(e.target.value)}
-            required
-          />
-          <div className="flex w-full justify-center gap-2">
-            <label htmlFor="color" className="text-[darkblue] font-bold text-lg">Color: </label>
-            <input type="color" {...register("color")} required />
-          </div>
-        </fieldset>
+            <label htmlFor="date" className="text-[darkblue] font-bold text-lg">
+              Fecha Inicio:
+            </label>
+            <input
+              type="datetime-local"
+              id="date"
+              className="outline-none border-gray-400 border-[1px] w-[90%] rounded-md p-3 text-center"
+              {...register("dateStart")}
+              value={dateStart}
+              onChange={(e) => setDateStart(e.target.value)}
+              required
+            />
 
-        <button type="submit" className="p-2 bg-blue-600 m-2 text-white font-bold rounded-md">
-          Agregar
-        </button>
-      </form>
-    </div>
+            <label htmlFor="date" className="text-[darkblue] font-bold text-lg">
+              Fecha Fin:
+            </label>
+            <input
+              type="datetime-local"
+              id="date"
+              className="outline-none border-gray-400 border-[1px] w-[90%] rounded-md p-3 text-center"
+              {...register("dateEnd")}
+              value={dateEnd}
+              onChange={(e) => setDateEnd(e.target.value)}
+              required
+            />
+            <div className="flex w-full justify-center gap-2">
+              <label htmlFor="color" className="text-[darkblue] font-bold text-lg">Color: </label>
+              <input type="color" name="color" id="color" {...register("color")} required/>
+            </div>
+          </fieldset>
+
+          <button type="submit" className="p-2 bg-blue-600 m-2 text-white font-bold rounded-md">
+            Agregar
+          </button>
+        </form>
+      </div>
+    
   );
 }
 

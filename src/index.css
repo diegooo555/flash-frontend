@@ -9,6 +9,25 @@
     box-sizing: border-box;
 }
 
+.scroll-hidden{
+  scrollbar-width: none;
+}
+
+::-webkit-scrollbar{
+  width: 10px;
+  height: 100%;
+  background-color: white;
+}
+
+::-webkit-scrollbar-track{
+  border-radius: 1rem;
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: rgb(191, 191, 191);
+  border-radius: 1rem;
+}
+
 .itim-regular {
     font-family: "Itim", cursive;
     font-weight: 400;

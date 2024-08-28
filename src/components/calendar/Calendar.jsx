@@ -3,6 +3,7 @@ import HeaderWeek from "./HeaderWeek";
 import IndicatorHour from "./IndicatorHour";
 import ModalTask from "./ModalTask";
 import CreateTask from "./CreateTask";
+import Task from "./Task";
 import { TaskContext } from "../../context/useTaskContext";
 import ActualTime from "./ActualTime";
 import PropTypes from "prop-types";
@@ -172,7 +173,6 @@ const arrSimpleDaysWeek = (day, dayFinal) => {
 
 const filterTaskByWeek = (day, month, year, dayFinal, monthFinal, yearFinal, tasks, arrDays) => {
 
-  console.log("mes: " + month + "year " + year + "monthFinal "+ monthFinal + "yearFinal" + yearFinal);
   const tasksWeek = tasks.filter((task) => {
     const dateStart = getComponentsFullDate(task.dateStart);
     const conditionYear = (dateStart.year === year) || (dateStart.year === yearFinal);
@@ -188,13 +188,13 @@ const filterTaskByWeek = (day, month, year, dayFinal, monthFinal, yearFinal, tas
 };
 
 const ColumnHours = () => (
-  <div className="flex flex-col">
+  <div className="grid grid-rows-[24] w-[6%] relative bottom-3">
     {hoursDay.map((hour, index) => (
       <span
         key={index}
-        className="text-xs font-semibold text-gray-500 h-16 text-end pr-1"
+        className="text-sm font-semibold text-gray-500 text-end pr-1 max-md:text-[10px] max-sm:text-[8px] h-16 max-md:h-24"
       >
-        {`${hour.hour} ${hour.amPm}`}
+        {index !== 0 ? `${hour.hour} ${hour.amPm}` : ""}
       </span>
     ))}
   </div>
@@ -205,7 +205,7 @@ const RowHour = ({hourStart, hourEnd, amPm, amPmEnd, day, month, year}) => {
 
   return (
     <>
-      <div className="border-solid border border-blue-300 hover:bg-blue-100" onClick={() => modalCreateContext.setCreateModal(
+      <div className="border-solid border border-blue-300 hover:bg-blue-100 h-16 max-md:h-24" onClick={() => modalCreateContext.setCreateModal(
         {
           state: true, 
           hourStart: hourStart, 
@@ -248,14 +248,13 @@ const RowsHour = ({day, month, year}) => (
     <RowHour hourStart={9} amPm={"PM"} hourEnd={10} amPmEnd={"PM"} day={day} month={month} year={year}/>
     <RowHour hourStart={10} amPm={"PM"} hourEnd={11} amPmEnd={"PM"} day={day} month={month} year={year}/>
     <RowHour hourStart={11} amPm={"PM"} hourEnd={12} amPmEnd={"PM"} day={day} month={month} year={year}/>
-    
   </div>
 );
 
 const ColumnDay = memo(function ColumnDay({dayObject}) {
   return(
     <div
-    className={dayObject.state?"grid grid-rows-[24] bg-blue-200 relative":"grid grid-rows-[24] relative"
+      className={dayObject.state?" bg-blue-200 relative":"relative"
     }>
     <RowsHour day={dayObject.day} month={dayObject.month} year={dayObject.year} />
     {dayObject.state && <IndicatorHour />}
@@ -275,7 +274,7 @@ const formatHourMeridian = (dateActual) => {
   return formattedOffset;
 };
 
-export function Calendar({tasks}) {
+export function Calendar({tasks, mdScreen}) {
   const [taskModal, setTaskModal] = useState({ state: false, task: {_id: "", title: "", description: "", dateStart: "", dateEnd: ""} });
   const [createModal, setCreateModal] = useState( {state: false, hourStart: 0, hourEnd: 0, amPm: "", amPmEnd: "",  day: 0,  month: 0,  year: 0});
   const dateNow = new Date();
@@ -299,7 +298,7 @@ export function Calendar({tasks}) {
 
   const filterTaskWeek = filterTaskByWeek(arrDaysWeek[0].day, arrDaysWeek[0].month, arrDaysWeek[0].year, arrDaysWeek[6].day, arrDaysWeek[6].month, arrDaysWeek[6].year, tasks, arrDaysSimple);
 
-  const sizeGridColumns = "6%" + "13.42857%".repeat(7);
+  const sizeGridColumns = "14.28571429%".repeat(7);
 
   const prevWeek = () => {
     const daysMonth = (actualDate.currentMonth !== 1) ? generateDaysMonths(actualDate.currentYear)[actualDate.currentMonth - 2] : 31;
@@ -369,69 +368,62 @@ export function Calendar({tasks}) {
     scrollCurrentTime();
   }, []);
 
-  console.log(arrDaysWeek);
-
   return (
     <ModalCreate.Provider value={{createModal, setCreateModal}}>
-      <div className="w-full h-[15%] flex items-center gap-4">
-        <div className="w-[30%] flex justify-center items-center gap-2">
-          {monthNames [actualDate.currentMonth - 1]}
-          <button className="w-10 h-10 p-3 rounded-full bg-gray-400 flex justify-center items-center text-white font-bold text-2xl" onClick={prevWeek}>
-           <img src="/arrow.png" alt="flecha" className="h-full w-full rotate-180 "/>
-          </button>
-          <button onClick={nextWeek} className="w-10 h-10 p-3 rounded-full bg-gray-400 flex justify-center items-center text-white font-bold text-2xl"> 
-            <img src="/arrow.png" alt="flecha" className="h-full w-full"/>
-          </button>
+
+      <div className="w-full h-[15%] flex items-center justify-around gap-4 max-md-h-auto max-md:max-h-20">
+        <div className="flex flex-col justify-center items-center h-full w-40 max-md:w-30">
+          <span className="font-bold text-2xl max-md:text-xl text-blue-600 max-sm:text-base">{monthNames [actualDate.currentMonth - 1]}</span>
+          <div className="flex w-full justify-center items-center gap-4">
+            <button className="w-10 h-10 p-3 rounded-full bg-blue-300 flex justify-center items-center text-white font-bold text-2xl max-md:w-9 max-md:h-9" onClick={prevWeek}>
+              <img src="/arrow.png" alt="flecha" className="h-full w-full rotate-180 "/>
+            </button>
+            <button onClick={nextWeek} className="w-10 h-10 p-3 rounded-full bg-blue-300 flex justify-center items-center text-white font-bold text-2xl max-md:w-9 max-md:h-9"> 
+              <img src="/arrow.png" alt="flecha" className="h-full w-full"/>
+            </button>
+          </div>
         </div>
-        <div className="h-full flex justify-center items-center gap-4 w-[40%]">
+        <div className="h-full flex justify-center items-center">
           <ActualTime/>
         </div>
-        <div className="w-[30%] text-2xl text-purple-500">Hola Diego</div>
+        <div className="text-2xl text-purple-500">Diego</div>
       </div>
       
-      <div className="h-screen overflow-hidden" onClick={() => { if(createModal.state){
+      <div className="h-[85%] overflow-hidden" onClick={() => { if(createModal.state){
         setCreateModal((prev) => ({...prev, state: false}))
-      }}}>
+      }
+      if(taskModal.state){
+        setTaskModal({ state: false, task: {_id: "", title: "", description: "", dateStart: "", dateEnd: ""} })
+      }
+      }}>
         
         
         <HeaderWeek arrDays={arrDaysWeek} formatMeridianHour={formatMeridian} />
-        <div className="h-[69%]">
-        
-          <div className="overflow-y-scroll h-full w-full grid grid-cols-8 relative" style={{ gridTemplateColumns: sizeGridColumns}} ref={scrollableRef}>
+        <div className="h-[84%] pt-1">
+          <div className="overflow-y-scroll h-full w-full relative flex" ref={scrollableRef}>
+            <ColumnHours/>
+            <div className="w-[94%] h-full grid" style={{ gridTemplateColumns: sizeGridColumns}}>
+              <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[0]}/>
+              <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[1]}/>
+              <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[2]}/>
+              <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[3]}/>
+              <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[4]}/>
+              <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[5]}/>
+              <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[6]}/>
               { filterTaskWeek.length > 0 &&
               filterTaskWeek.map((task, index) => {
-                console.log(task);
               const dateStart = task.dateStart;
               const dateEnd = task.dateEnd;
               const componentsDateStart = getComponentsFullDate(dateStart);
               const elementsTask = getElementsTask(dateStart, dateEnd, componentsDateStart.day);
-              const positionPorcent = (96  * Number(elementsTask.hourStart / 24));
-              const color = task.color;
-              console.log(positionPorcent)
-              const leftPorcent =  ((arrDaysSimple.indexOf(componentsDateStart.day)) * 13.42857) + 6;
-              console.log(leftPorcent)
-              const heightPorcent = 96 * ((elementsTask.defHourEnd - elementsTask.defHourSt) / 24);
+              const positionPorcent = ((mdScreen ? 144 : 96)  * Number(elementsTask.hourStart / 24));
+              const leftPorcent =  ((arrDaysSimple.indexOf(componentsDateStart.day)) * (94/7)) + 6;
+              const heightPorcent = (mdScreen ? 144 : 96) * ((elementsTask.defHourEnd - elementsTask.defHourSt) / 24);
               return (
-              <button
-                key={index}
-                className="w-[13.42857%] absolute
-                rounded-md flex flex-col items-center justify-center text-white z-10"
-                style={{ top: `${positionPorcent}rem`, height: `${heightPorcent}rem`, left: `${leftPorcent}%`, backgroundColor: color}}
-                onClick={() => setTaskModal({ state: true, task: task })}
-              >
-            <span>{task.title}</span>
-            <span>{elementsTask.strIntervalHour}</span>
-          </button>
-            );
-          }) }
-            <ColumnHours />
-            <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[0]}/>
-            <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[1]}/>
-            <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[2]}/>
-            <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[3]}/>
-            <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[4]}/>
-            <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[5]}/>
-            <ColumnDay setTaskModal={setTaskModal} dayObject={arrDaysWeek[6]}/>
+                <Task key={index} task={task} positionPorcent={positionPorcent} heightPorcent={heightPorcent} leftPorcent={leftPorcent} setTaskModal={setTaskModal} strIntervalHour={elementsTask.strIntervalHour}/>
+              );
+            })}
+            </div>
           </div>
         </div>
       </div>
@@ -445,6 +437,7 @@ export function Calendar({tasks}) {
 
 Calendar.propTypes = {
   tasks: PropTypes.array.isRequired,
+  mdScreen: PropTypes.bool.isRequired,
 }
 
 ColumnDay.propTypes = {
