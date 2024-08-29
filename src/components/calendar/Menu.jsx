@@ -1,5 +1,6 @@
-const Link = (props) => {
-    const {href, content} = props;
+import PropTypes from "prop-types";
+
+const Link = ({href, content}) => {
     return(
         <a href={href} className="itim-regular text-white text-xl font-bold no-underline p-3 hover:scale-110">{content}</a>
     )
@@ -20,6 +21,11 @@ function MenuTaskPage(){
 
         </nav>
     )
+}
+
+Link.propTypes = {
+    href: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired,
 }
 
 export default MenuTaskPage;

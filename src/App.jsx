@@ -5,7 +5,6 @@ import AlfaPage from "./pages/AlfaPage";
 import TaskPage from "./pages/TaskPage";
 import Register from "./pages/RegisterPage";
 import Login from "./pages/LoginPage";
-import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
