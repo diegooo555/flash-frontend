@@ -5,6 +5,8 @@ import AlfaPage from "./pages/AlfaPage";
 import TaskPage from "./pages/TaskPage";
 import Register from "./pages/RegisterPage";
 import Login from "./pages/LoginPage";
+import Projects from "./pages/Projects";
+import ProtectedRoute from "./ProtectedRoute";
 
 function App() {
   return (
@@ -13,9 +15,10 @@ function App() {
         <HashRouter>
           <Routes>
             <Route path="/" element={<AlfaPage />} />
-            
+              <Route path="projects" element={<Projects />} />
+            <Route element={<ProtectedRoute/>}>
               <Route path="/tasks" element={<TaskPage />} />
-      
+            </Route>
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login/>}/>
           </Routes>

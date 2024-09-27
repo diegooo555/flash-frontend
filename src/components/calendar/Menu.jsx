@@ -15,9 +15,9 @@ function MenuTaskPage(){
 
             <Link href="/#" content="INICIO"/>
             <Link href="/#/tasks" content="TASKS"/>
-            <Link href="./" content="FINANCE"/>
-            <Link href="./" content="COMPANYS"/>
-            <Link href="./" content="PROJECTS"/>
+            <Link href="./#/" content="FINANCE"/>
+            <Link href="./#/" content="COMPANYS"/>
+            <Link href="./#/projects" content="PROJECTS"/>
 
         </nav>
     )

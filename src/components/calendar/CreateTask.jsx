@@ -1,13 +1,13 @@
 import { useState, useContext } from "react";
 import { TaskContext } from "../../context/useTaskContext";
 import { useForm } from "react-hook-form";
-import PropTypes from 'prop-types';
+import { createTaskDaily } from "../../logic/createTask.js";
+import { ModalCreate } from "../../context/ModalCreateContext.js";
 
-
-/* 2024-08-09T22:12 
-2024-8-8T9:00
-2024-08-09T09:00*/
-function CreateTask({createModal, setCreateTaskModal}) {
+function CreateTask() {
+  const modalCreateContext = useContext(ModalCreate);
+  const createModal = modalCreateContext?.createModal;
+  const setCreateTaskModal = modalCreateContext?.setCreateModal;
   const { register, handleSubmit } = useForm();
 
   const formatDate = (hourRe, amPmRe) => {
@@ -22,15 +22,20 @@ function CreateTask({createModal, setCreateTaskModal}) {
 
   const [dateStart, setDateStart] = useState(formatDate(createModal.hourStart, createModal.amPm))
   const [dateEnd, setDateEnd] = useState(formatDate(createModal.hourEnd, createModal.amPmEnd))
+  const [repeatWork, setRepeatWork] = useState({state: false, date: "", frequency: "week"})
 
   const taskContext = useContext(TaskContext);
   const wscreen = window.innerHeight / 2;
   const hscreen = window.innerWidth / 2;
 
-
   const onSubmit = handleSubmit(async (data) => {
-    await taskContext?.createTask(data);
+    if (!repeatWork.state) {
+      await taskContext?.createTask(data);
       setCreateTaskModal((prev) => ({...prev, state: false}));
+    }else{
+      await taskContext?.createTasks({ tasks: createTaskDaily(data, repeatWork.frequency)});
+      setCreateTaskModal((prev) => ({...prev, state: false}));
+    }
   });
   return (
 
@@ -104,6 +109,45 @@ function CreateTask({createModal, setCreateTaskModal}) {
             </div>
           </fieldset>
 
+          <fieldset>
+            <div className="flex gap-3 justify-center p-2">
+              <label htmlFor="repeat">Repetir Tarea</label>
+              <input type="checkbox" name="repeat" id="repeat" checked={repeatWork.state} onChange={() => setRepeatWork((prevState) => (
+                {...prevState, state: !repeatWork.state, frequency: "week"}
+              ))}/>
+            </div>
+
+            {
+              repeatWork.state && (
+                <div className="flex flex-col items-center">
+              
+                <label htmlFor="date-repeat" className="text-[darkblue] font-bold text-lg">
+                  Fecha Límite:
+                </label>
+                <input
+                  type="date"
+                  id="date-repeat"
+                  className="outline-none border-gray-400 border-[1px] w-[90%] rounded-md p-3 text-center"
+                  {...register("dateRepeat")}
+                  value={repeatWork.date}
+                  onChange={(e) => setRepeatWork((prevState) => ({...prevState, date: e.target.value}))}
+                  required
+                />
+
+                <label htmlFor="date-repeat" className="text-[darkblue] font-bold text-lg">
+                  Frecuencia:
+                </label>
+                <select name="frequency" id="frequency" onChange={(e) => setRepeatWork((prevState) => ({...prevState, frequency: e.target.value}))}>
+                  <option value="week">Semanal</option>
+                  <option value="daily">Diaria</option>
+                  <option value="month">Mensual</option>
+                  <option value="year">Anual</option>
+                </select>   
+                </div>
+              )
+            }
+          </fieldset>
+
           <button type="submit" className="p-2 bg-blue-600 m-2 text-white font-bold rounded-md">
             Agregar
           </button>
@@ -111,11 +155,6 @@ function CreateTask({createModal, setCreateTaskModal}) {
       </div>
     
   );
-}
-
-CreateTask.propTypes = {
-  createModal: PropTypes.object.isRequired,
-  setCreateTaskModal: PropTypes.func.isRequired,
 }
 
 export default CreateTask;
